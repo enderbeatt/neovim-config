@@ -1,4 +1,7 @@
 local dap = require('dap')
+require('mason-nvim-dap').setup({
+    ensure_installed = {'cpptools'}
+})
 
 dap.adapters.cppdbg = {
     id = 'cppdbg',
