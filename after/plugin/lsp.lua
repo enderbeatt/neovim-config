@@ -53,3 +53,14 @@ cmp.setup({
         ['<C-y>'] = cmp.mapping.complete(),
     }),
 })
+
+require('lspconfig').clangd.setup({
+    cmd = {
+        "clangd",
+        "--background-index",
+        "--suggest-missing-includes",
+        "--clang-tidy",
+        "--compile-commands-dir=out/Debug"
+    }
+
+})
