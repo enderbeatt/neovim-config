@@ -18,3 +18,7 @@ vim.opt.smartcase = true
 
 vim.opt.splitbelow = true
 vim.opt.splitright = true
+
+vim.opt.wrap = false
+
+vim.keymap.set("x", "<leader>p", [["_dP]])
