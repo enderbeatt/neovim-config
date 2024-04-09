@@ -22,3 +22,4 @@ vim.opt.splitright = true
 vim.opt.wrap = false
 
 vim.keymap.set("x", "<leader>p", [["_dP]])
+vim.keymap.set("n", "<leader>r", [[:wa<cr> 1<c-w><c-w>:!rustc "%" -o "%<".exe && "%<".exe < input.txt > output.txt<cr>]])
