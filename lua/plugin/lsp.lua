@@ -105,7 +105,7 @@ return {
                     "--clang-tidy",
                     "--completion-style=bundled",
                     "--cross-file-rename",
-                    "--header-insertion=iwyu",
+                    "--header-insertion=never",
                 },
             })
 
