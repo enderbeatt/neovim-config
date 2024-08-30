@@ -26,4 +26,11 @@ vim.opt.signcolumn = "yes"
 
 vim.keymap.set("x", "<leader>p", [["_dP]])
 vim.keymap.set("n", "<leader>r", [[:wa<cr> 1<c-w><c-w>:!rustc "%" -o "%<".exe && "%<".exe < input.txt > output.txt<cr>]])
+vim.keymap.set("n", "]q", [[:cn<cr>]])
+vim.keymap.set("n", "[q", [[:cp<cr>]])
 vim.keymap.set("t", "<esc><esc>", [[<c-\><c-n>]])
+
+vim.keymap.set("n", "<leader>1", [[1gt]])
+vim.keymap.set("n", "<leader>2", [[2gt]])
+vim.keymap.set("n", "<leader>3", [[3gt]])
+vim.keymap.set("n", "<leader>4", [[4gt]])
