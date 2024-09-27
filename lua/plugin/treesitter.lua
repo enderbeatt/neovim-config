@@ -5,7 +5,7 @@ return {
 
     config = function()
         require'nvim-treesitter.configs'.setup {
-            ensure_installed = { "c", "cpp", "cmake", "python", "lua", "vim", "vimdoc", "query" },
+            ensure_installed = { "c", "cpp", "cmake", "python", "lua", "vim", "vimdoc", "query", "latex", "markdown", "markdown_inline"},
 
             -- Install parsers synchronously (only applied to `ensure_installed`)
             sync_install = false,
