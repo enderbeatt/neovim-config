@@ -16,6 +16,7 @@ return {
             'hrsh7th/cmp-buffer',
             'hrsh7th/cmp-path',
             "L3MON4D3/LuaSnip",
+            "hrsh7th/cmp-nvim-lsp-signature-help",
         },
         config = function()
             vim.api.nvim_create_autocmd('LspAttach', {
@@ -60,6 +61,7 @@ return {
                     {name = 'path'},
                     {name = 'nvim_lsp'},
                     {name = 'nvim_lua'},
+                    { name = 'nvim_lsp_signature_help' },
                     {name = 'luasnip', keyword_length = 2},
                     {name = 'buffer', keyword_length = 3},
                 },
@@ -69,63 +71,81 @@ return {
                     ['<C-Space>'] = cmp.mapping.confirm({ select = true }),
                     ['<CR>'] = cmp.mapping.confirm({ select = true }),
                     ['<C-y>'] = cmp.mapping.complete(),
-                }),
-                snippet = {
-                    expand = function(args)
-                        require('luasnip').lsp_expand(args.body)
-                    end,
-                },
-            })
+                    ["<Tab>"] = cmp.mapping(function(fallback)
+                        if cmp.visible() then
+                            cmp.select_next_item()
+                        elseif require("luasnip").expand_or_jumpable() then
+                            require("luasnip").expand_or_jump()
+                        else
+                            fallback()
+                        end
+                    end, { "i", "s" }),
+                    ["<S-Tab>"] = cmp.mapping(function(fallback)
+                        if cmp.visible() then
+                            cmp.select_prev_item()
+                        elseif require("luasnip").jumpable(-1) then
+                            require("luasnip").jump(-1)
+                        else
+                            fallback()
+                        end
+                    end, { "i", "s" }),
+            }),
+            snippet = {
+                expand = function(args)
+                    require('luasnip').lsp_expand(args.body)
+                end,
+            },
+        })
 
-            require('lspconfig').clangd.setup({
-                capabilities = capabilities,
-                cmd = {
-                    "clangd",
-                    "--background-index",
-                    -- by default, clang-tidy use -checks=clang-diagnostic-*,clang-analyzer-*
-                    -- to add more checks, create .clang-tidy file in the root directory
-                    -- and add Checks key, see https://clang.llvm.org/extra/clang-tidy/
-                    "--clang-tidy",
-                    "--completion-style=bundled",
-                    "--cross-file-rename",
-                    "--header-insertion=never",
-                },
-            })
-            require('lspconfig').rust_analyzer.setup({
-                capabilities = capabilities,
-                settings = {
-                    ["rust-analyzer"] = {
-                        checkOnSave = true,
-                        check = {
-                            enable = true,
-                            command = "clippy",
-                            features = "all",
-                        },
+        require('lspconfig').clangd.setup({
+            capabilities = capabilities,
+            cmd = {
+                "clangd",
+                "--background-index",
+                -- by default, clang-tidy use -checks=clang-diagnostic-*,clang-analyzer-*
+                -- to add more checks, create .clang-tidy file in the root directory
+                -- and add Checks key, see https://clang.llvm.org/extra/clang-tidy/
+                "--clang-tidy",
+                "--completion-style=bundled",
+                "--cross-file-rename",
+                "--header-insertion=never",
+            },
+        })
+        require('lspconfig').rust_analyzer.setup({
+            capabilities = capabilities,
+            settings = {
+                ["rust-analyzer"] = {
+                    checkOnSave = true,
+                    check = {
+                        enable = true,
+                        command = "clippy",
+                        features = "all",
                     },
-                }
-            })
-            require('lspconfig').basedpyright.setup({
-                capabilities = capabilities,
-                settings = {
-                    basedpyright = {
-                        analysis = {
-                            typeCheckingMode = "basic",
-                        }
+                },
+            }
+        })
+        require('lspconfig').basedpyright.setup({
+            capabilities = capabilities,
+            settings = {
+                basedpyright = {
+                    analysis = {
+                        typeCheckingMode = "basic",
                     }
                 }
-            })
-            require('lspconfig').lua_ls.setup({
-                capabilities = capabilities,
-                settings = {
-                    Lua = {
-                        runtime = { version = "Lua 5.1" },
-                        diagnostics = {
-                            globals = { "vim", "it", "describe", "before_each", "after_each" },
-                        }
+            }
+        })
+        require('lspconfig').lua_ls.setup({
+            capabilities = capabilities,
+            settings = {
+                Lua = {
+                    runtime = { version = "Lua 5.1" },
+                    diagnostics = {
+                        globals = { "vim", "it", "describe", "before_each", "after_each" },
                     }
                 }
-            })
+            }
+        })
 
-        end
-    }
+    end
+}
 }
