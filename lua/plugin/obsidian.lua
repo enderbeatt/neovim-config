@@ -295,5 +295,6 @@ return {
         vim.keymap.set("n", "<leader>oo", [[:ObsidianOpen<cr>]], {desc = "Open Current Note In Obsidian"})
         vim.keymap.set("n", "<leader>os", [[:ObsidianSearch<cr>]], {desc = "Search In Obsidian Vault"})
         vim.keymap.set("n", "<leader>ot", [[:ObsidianTemplate<cr>]], {desc = "Paste Obsidian Template"})
+        vim.keymap.set("n", "<leader>ob", [[:ObsidianBacklinks<cr>]], {desc = "Look at backlinks"})
     end
 }
