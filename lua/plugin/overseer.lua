@@ -23,5 +23,6 @@ return {
       vim.keymap.set('n', '<leader>tt', [[:OverseerToggle<cr>]], {desc = '[T]ask [T]oggle'})
       vim.keymap.set('n', '<leader>tn', [[:OverseerBuild<cr>]], {desc = '[T]ask [N]ew'})
       vim.keymap.set('n', '<leader>tr', [[:OverseerQuickAction restart<cr>]], {desc = '[T]ask [R]un Last'});
+      vim.keymap.set('n', '<leader>ts', [[:OverseerRunCmd<cr>]], {desc = '[T]ask [S]hell'});
   end
 }
