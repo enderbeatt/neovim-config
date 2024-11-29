@@ -10,8 +10,8 @@ return {
                   "on_output_summarize",
                   "on_exit_set_status",
                   "on_complete_notify",
-                  { "on_output_quickfix", open = true},
-                  { "on_complete_dispose", require_view = { "SUCCESS", "FAILURE" } },
+                  { "on_result_diagnostics_quickfix", open = true, close = true},
+                  { "open_output", direction = "horizontal" },
               },
               -- Tasks from tasks.json use these components
               default_vscode = {
