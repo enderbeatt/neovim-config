@@ -7,7 +7,7 @@ return {
         mc.setup()
 
         local set = vim.keymap.set
-
+        local del = vim.keymap.del
         -- Add or skip cursor above/below the main cursor.
         set({"n", "v"}, "<M-k>",
             function() mc.lineAddCursor(-1) end)
@@ -73,13 +73,17 @@ return {
 
         -- Split visual selections by regex.
         set("v", "S", mc.splitCursors)
+        del("s", "S")
 
         -- Append/insert for each line of visual selections.
         set("v", "I", mc.insertVisual)
+        del("s", "I")
         set("v", "A", mc.appendVisual)
+        del("s", "A")
 
         -- match new cursors within visual selections by regex.
         set("v", "M", mc.matchCursors)
+        del("s", "M")
 
         -- Rotate visual selection contents.
         set("v", "<M-t>",
@@ -90,6 +94,12 @@ return {
         -- Jumplist support
         set({"v", "n"}, "<c-i>", mc.jumpForward)
         set({"v", "n"}, "<c-o>", mc.jumpBackward)
+
+        -- add cursors on each quickfix list match
+        set("n", "<leader>qc", function ()
+            vim.cmd[[cdo lua require("multicursor-nvim").addCursor('i')]]
+            mc.deleteCursor()
+        end)
 
         -- Customize how cursors look.
         local hl = vim.api.nvim_set_hl
