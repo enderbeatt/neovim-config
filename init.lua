@@ -18,7 +18,7 @@ require("editor")
 require("lazy").setup({
     spec = {
         { import = "plugin" },
-        { import = "plugin/dap" },
+        { import = "plugin/debug" },
     },
     change_detection = { notify = false }
 })
