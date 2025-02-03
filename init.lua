@@ -23,3 +23,5 @@ require("lazy").setup({
     change_detection = { notify = false }
 })
 
+require("handmade.terminal")
+require("handmade.run_shell")
