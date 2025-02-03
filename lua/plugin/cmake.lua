@@ -15,7 +15,7 @@ return {
             --       ${kitGenerator}
             --       ${variant:xx}
             cmake_build_directory = "build", -- this is used to specify generate directory for cmake, allows macro expansion, relative to vim.loop.cwd()
-            cmake_soft_link_compile_commands = false, -- this will automatically make a soft link from compile commands file to project root dir
+            cmake_soft_link_compile_commands = true, -- this will automatically make a soft link from compile commands file to project root dir
             cmake_compile_commands_from_lsp = true, -- this will automatically set compile commands file location using lsp, to use it, please set `cmake_soft_link_compile_commands` to false
             cmake_kits_path = nil, -- this is used to specify global cmake kits path, see CMakeKits for detailed usage
             cmake_variants_message = {
@@ -39,7 +39,7 @@ return {
                         position = "belowright", -- "vertical", "horizontal", "leftabove", "aboveleft", "rightbelow", "belowright", "topleft", "botright", use `:h vertical` for example to see help on them
                         size = 10,
                         encoding = "utf-8", -- if encoding is not "utf-8", it will be converted to "utf-8" using `vim.fn.iconv`
-                        auto_close_when_success = true, -- typically, you can use it with the "always" option; it will auto-close the quickfix buffer if the execution is successful.
+                        auto_close_when_success = false, -- typically, you can use it with the "always" option; it will auto-close the quickfix buffer if the execution is successful.
                     },
                     toggleterm = {
                         direction = "float", -- 'vertical' | 'horizontal' | 'tab' | 'float'
@@ -111,7 +111,7 @@ return {
                         name = "Main Terminal",
                         prefix_name = "[CMakeTools]: ", -- This must be included and must be unique, otherwise the terminals will not work. Do not use a simple spacebar " ", or any generic name
                         split_direction = "horizontal", -- "horizontal", "vertical"
-                        split_size = 11,
+                        split_size = 20,
 
                         -- Window handling
                         single_terminal_per_instance = true, -- Single viewport, multiple windows
