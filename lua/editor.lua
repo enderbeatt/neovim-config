@@ -37,3 +37,4 @@ vim.keymap.set("n", "<leader>3", [[3gt]])
 vim.keymap.set("n", "<leader>4", [[4gt]])
 
 vim.cmd([[autocmd BufEnter *.slint :setlocal filetype=slint]])
+vim.keymap.set({"n", "t"}, "<C-t>", require('handmade.terminal').toggle_terminal, { noremap = true, silent = true })

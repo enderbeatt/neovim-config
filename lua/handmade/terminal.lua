@@ -1,7 +1,9 @@
-TERM_BUF = nil
-TERM_WIN = nil
+local M = {
+    TERM_BUF = nil,
+    TERM_WIN = nil,
+}
 
-local function toggle_terminal()
+function M.toggle_terminal(cmd)
     if TERM_BUF == nil or not vim.api.nvim_buf_is_valid(TERM_BUF) then
         TERM_BUF = vim.api.nvim_create_buf(false, true)
     end
@@ -17,28 +19,8 @@ local function toggle_terminal()
     end
 
     if TERM_BUF ~= nil and vim.bo[TERM_BUF].buftype ~= "terminal" then
-        vim.cmd.terminal()
+        vim.cmd.terminal(cmd)
     end
 end
 
-
-vim.keymap.set({"n", "t"}, "<C-t>", toggle_terminal, { noremap = true, silent = true })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+return M
