@@ -1,26 +1,49 @@
 local M = {
-    TERM_BUF = nil,
-    TERM_WIN = nil,
+    term_buf = nil,
+    term_win = nil,
+    terminal_config = {
+        split = "below",
+        win = 0,
+        height = 20,
+    }
 }
 
+function M.force_start_terminal(cmd)
+    if M.term_buf ~= nil then
+        M.quit_terminal()
+    end
+    M.term_buf = vim.api.nvim_create_buf(false, true)
+    M.term_win = vim.api.nvim_open_win(M.term_buf, true, M.terminal_config)
+    vim.cmd.terminal(cmd)
+end
+
 function M.toggle_terminal(cmd)
-    if TERM_BUF == nil or not vim.api.nvim_buf_is_valid(TERM_BUF) then
-        TERM_BUF = vim.api.nvim_create_buf(false, true)
+    if M.term_buf == nil or not vim.api.nvim_buf_is_valid(M.term_buf) then
+        M.term_buf = vim.api.nvim_create_buf(false, true)
     end
 
-    if TERM_WIN == nil or not vim.api.nvim_win_is_valid(TERM_WIN) then
-        TERM_WIN = vim.api.nvim_open_win(TERM_BUF, true, {
-            split = "below",
-            win = 0,
-            height = 15,
-        })
+    if M.term_win == nil or not vim.api.nvim_win_is_valid(M.term_win) then
+        M.term_win = vim.api.nvim_open_win(M.term_buf, true, M.terminal_config)
     else
-        vim.api.nvim_win_hide(TERM_WIN)
+        vim.api.nvim_win_hide(M.term_win)
     end
 
-    if TERM_BUF ~= nil and vim.bo[TERM_BUF].buftype ~= "terminal" then
+    if M.term_buf ~= nil and vim.bo[M.term_buf].buftype ~= "terminal" then
         vim.cmd.terminal(cmd)
     end
+end
+
+function M.hide_terminal()
+    if M.term_win ~= nil and vim.api.nvim_win_is_valid(M.term_win) then
+        vim.api.nvim_win_hide(M.term_win)
+    end
+end
+
+function M.quit_terminal()
+    if M.term_win ~= nil and vim.api.nvim_win_is_valid(M.term_win) then
+        vim.api.nvim_win_hide(M.term_win)
+    end
+    vim.api.nvim_buf_delete(M.term_buf, {})
 end
 
 return M

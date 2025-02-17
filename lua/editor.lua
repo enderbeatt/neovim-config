@@ -23,7 +23,6 @@ vim.opt.wrap = false
 
 vim.opt.conceallevel = 2
 
-vim.opt.showtabline = 0
 vim.opt.signcolumn = "yes"
 
 vim.keymap.set("x", "<leader>p", [["_dP]])
@@ -37,4 +36,10 @@ vim.keymap.set("n", "<leader>3", [[3gt]])
 vim.keymap.set("n", "<leader>4", [[4gt]])
 
 vim.cmd([[autocmd BufEnter *.slint :setlocal filetype=slint]])
-vim.keymap.set({"n", "t"}, "<C-t>", require('handmade.terminal').toggle_terminal, { noremap = true, silent = true })
+
+vim.keymap.set({"n", "t"}, "<C-t>", function ()
+    vim.cmd[[cclose]]
+    require('handmade.terminal').toggle_terminal()
+end, {silent = true, desc = "Toggle Terminal"})
+
+
