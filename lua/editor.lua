@@ -25,6 +25,8 @@ vim.opt.conceallevel = 2
 
 vim.opt.signcolumn = "yes"
 
+vim.opt.timeoutlen = 200
+
 vim.keymap.set("x", "<leader>p", [["_dP]])
 vim.keymap.set("n", "]q", [[:cn<cr>]])
 vim.keymap.set("n", "[q", [[:cp<cr>]])
