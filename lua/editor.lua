@@ -42,12 +42,12 @@ vim.keymap.set("n", "<leader>4", [[4gt]])
 vim.cmd([[autocmd BufEnter *.slint :setlocal filetype=slint]])
 
 
+
 -- terminal
 vim.keymap.set({"n", "t"}, "<C-t>", function ()
     vim.cmd[[cclose]]
     require('handmade.terminal').toggle_terminal()
 end, {silent = true, desc = "Toggle Terminal"})
-
 
 -- folds
 vim.opt.foldcolumn = "1"
@@ -56,3 +56,11 @@ vim.opt.foldmethod = "expr"
 vim.cmd[[set foldexpr=nvim_treesitter#foldexpr()]]
 vim.keymap.set("n", "<Tab>", [[za]])
 
+vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+  desc = "Update folds",
+  callback = function()
+    vim.cmd([[
+      norm zx
+    ]])
+  end
+})
