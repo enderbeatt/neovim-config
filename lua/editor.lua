@@ -25,7 +25,7 @@ vim.opt.conceallevel = 2
 
 vim.opt.signcolumn = "yes"
 
-vim.opt.timeoutlen = 200
+vim.opt.timeoutlen = 500
 
 vim.opt.undofile = true
 
