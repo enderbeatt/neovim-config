@@ -27,6 +27,8 @@ vim.opt.signcolumn = "yes"
 
 vim.opt.timeoutlen = 200
 
+vim.opt.undofile = true
+
 vim.keymap.set("x", "<leader>p", [["_dP]])
 vim.keymap.set("n", "]q", [[:cn<cr>]])
 vim.keymap.set("n", "[q", [[:cp<cr>]])
@@ -39,9 +41,18 @@ vim.keymap.set("n", "<leader>4", [[4gt]])
 
 vim.cmd([[autocmd BufEnter *.slint :setlocal filetype=slint]])
 
+
+-- terminal
 vim.keymap.set({"n", "t"}, "<C-t>", function ()
     vim.cmd[[cclose]]
     require('handmade.terminal').toggle_terminal()
 end, {silent = true, desc = "Toggle Terminal"})
 
+
+-- folds
+vim.opt.foldcolumn = "1"
+vim.opt.foldlevel = 20
+vim.opt.foldmethod = "expr"
+vim.cmd[[set foldexpr=nvim_treesitter#foldexpr()]]
+vim.keymap.set("n", "<Tab>", [[za]])
 
