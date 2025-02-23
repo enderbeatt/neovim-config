@@ -5,22 +5,21 @@ function M.update_timer()
         return ""
     end
     local cur_time = os.time()
-    vim.print(M.set_time - cur_time)
     if M.set_time > cur_time then
         local delta = M.set_time - cur_time
-        local timer = vim.fn.timer_start(1000, M.update_timer)
+        local _ = vim.fn.timer_start(1000, M.update_timer)
         return os.date("!%H:%M:%S", delta)
     else
         return "TIME IS UP"
     end
 end
 
-function M.set_timer(str)
+function M.set_timer()
     local cur_time = os.time()
-
-    local sec = tonumber(str.fargs[1])
-    local delta = os.date("*t", 0)
-    delta.sec = sec
+    local hrs = tonumber(vim.fn.input("Enter hours: ")) or 0
+    local min = tonumber(vim.fn.input("Enter minutes: ")) or 0
+    local sec = tonumber(vim.fn.input("Enter seconds: ")) or 0
+    local delta = os.date("*t", hrs * 3600 + min * 60 + sec)
 
     M.set_time = os.time(delta) + cur_time
 
@@ -28,7 +27,7 @@ function M.set_timer(str)
 end
 
 
-vim.api.nvim_create_user_command("Timer", M.set_timer, { nargs = "+" })
+vim.api.nvim_create_user_command("Timer", M.set_timer, {})
 vim.api.nvim_create_user_command("TimerDismiss", function ()
     M.set_time = nil
 end, {})
