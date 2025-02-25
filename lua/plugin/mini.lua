@@ -12,6 +12,7 @@ return {
         require("mini.ai").setup({
             custom_textobjects = {
                 a = gen_spec({ a = '@parameter.outer', i = '@parameter.inner' }),
+                F = gen_spec({ a = '@function.outer', i = '@function.inner' }),
             }
 
         })
