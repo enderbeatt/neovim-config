@@ -15,12 +15,12 @@ function M.update_timer()
 end
 
 function M.set_timer()
-    local cur_time = os.time()
     local hrs = tonumber(vim.fn.input("Enter hours: ")) or 0
     local min = tonumber(vim.fn.input("Enter minutes: ")) or 0
     local sec = tonumber(vim.fn.input("Enter seconds: ")) or 0
     local delta = os.date("*t", hrs * 3600 + min * 60 + sec)
 
+    local cur_time = os.time()
     M.set_time = os.time(delta) + cur_time
 
     M.update_timer()
