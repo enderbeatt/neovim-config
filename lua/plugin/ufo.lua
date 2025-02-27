@@ -16,6 +16,7 @@ return {
         vim.keymap.set("n", "<S-Tab>", [[za]])
 
         require('ufo').setup({
+            open_fold_hl_timeout = 0,
             provider_selector = function(bufnr, filetype, buftype)
                 return {'treesitter', 'indent'}
             end
