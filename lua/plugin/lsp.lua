@@ -16,7 +16,6 @@ return {
             'hrsh7th/cmp-buffer',
             'hrsh7th/cmp-path',
             "L3MON4D3/LuaSnip",
-            "hrsh7th/cmp-nvim-lsp-signature-help",
         },
         config = function()
             vim.api.nvim_create_autocmd('LspAttach', {
@@ -59,7 +58,6 @@ return {
                     {name = 'path'},
                     {name = 'nvim_lsp'},
                     {name = 'nvim_lua'},
-                    { name = 'nvim_lsp_signature_help' },
                     {name = 'luasnip', keyword_length = 2},
                     {name = 'buffer', keyword_length = 3},
                 },
