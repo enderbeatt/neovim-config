@@ -12,8 +12,9 @@ return {
         vim.keymap.set('n', 'zR', require('ufo').openAllFolds)
         vim.keymap.set('n', 'zM', require('ufo').closeAllFolds)
 
-        vim.keymap.set("n", "<Tab>", [[zA]])
-        vim.keymap.set("n", "<S-Tab>", [[za]])
+        vim.keymap.set('n', '<Tab>', 'zA')
+        vim.keymap.set('n', '<S-Tab>', 'za')
+        vim.keymap.set('n', '<C-i>', '<C-i>')
 
         require('ufo').setup({
             open_fold_hl_timeout = 0,
