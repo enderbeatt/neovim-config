@@ -1,16 +1,17 @@
+local function get_vault_dir()
+    if vim.uv.os_uname().sysname == "Linux" then
+        return "~/obsidian-vault"
+    else
+        return "E:\\obsidian-vault"
+    end
+end
+
 return {
     "epwalsh/obsidian.nvim",
-    version = "*",  -- recommended, use latest release instead of latest commit
     lazy = true,
-    -- Replace the above line with this if you only want to load obsidian.nvim for markdown files in your vault:
-    event = {
-        -- If you want to use the home shortcut '~' here you need to call 'vim.fn.expand'.
-        -- E.g. "BufReadPre " .. vim.fn.expand "~" .. "/my-vault/*.md"
-        -- refer to `:h file-pattern` for more examples
-        "BufReadPre " .. vim.fn.expand "~" .. "/obsidian-vault/*.md",
-        "BufNewFile " .. vim.fn.expand "~" .. "/obsidian-vault/*.md",
-        "BufReadPre E:\\obsidian-vault\\*.md",
-        "BufNewFile E:\\obsidian-vault\\*.md",
+    version = "*",  -- recommended, use latest release instead of latest commit
+    cmd = {
+        "ObsidianOpen"
     },
     dependencies = {
         -- Required.
@@ -21,15 +22,8 @@ return {
     opts = {
         workspaces = {
             {
-                name = "linux",
-                path = "~/obsidian-vault",
-                overrides = {
-                    notes_subdir = "000-Zettelkasten/not-linked",
-                },
-            },
-            {
-                name = "windows",
-                path = "E:\\obsidian-vault",
+                name = "vault",
+                path = get_vault_dir(),
                 overrides = {
                     notes_subdir = "000-Zettelkasten/not-linked",
                 },
