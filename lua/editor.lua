@@ -48,5 +48,3 @@ vim.keymap.set({"n", "t"}, "<C-t>", function ()
     vim.cmd[[cclose]]
     require('handmade.terminal').toggle_terminal()
 end, {silent = true, desc = "Toggle Terminal"})
-
-
