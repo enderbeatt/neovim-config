@@ -91,6 +91,8 @@ return {
             },
         })
 
+        vim.diagnostic.config({virtual_text = true})
+
         require('lspconfig').clangd.setup({
             capabilities = capabilities,
             cmd = {
