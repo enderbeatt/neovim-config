@@ -19,8 +19,6 @@ vim.opt.smartcase = true
 vim.opt.splitbelow = true
 vim.opt.splitright = true
 
-vim.opt.wrap = false
-
 vim.opt.conceallevel = 2
 
 vim.opt.signcolumn = "yes"
