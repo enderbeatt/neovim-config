@@ -3,6 +3,21 @@ M.values = {}
 M.prompts = {}
 M.completions = {}
 
+--- @return boolean
+function M.is_dap_window(ft)
+    local dap_windows = {
+        ["dapui_watches"] = 1,
+        ["dapui_scopes"] = 1,
+        ["dapui_breakpoints"] = 1,
+        ["dapui_stacks"] = 1,
+        ["dapui_console"] = 1,
+        ["dap-repl"] = 1,
+    }
+    print(ft)
+    return dap_windows[ft] ~= nil
+end
+
+
 --- @param path string
 --- @return string
 function M.get_executable_path(path)
@@ -40,7 +55,6 @@ end
 function M.get_or_input_nil(type_str, prompt, default, completion)
     local val = M.get_or_input(type_str, prompt, default, completion)
     if val == "" then
-        M.values[type_str] = nil
         return nil
     end
     return val
@@ -48,7 +62,7 @@ end
 
 --- @param type_str string
 function M.update_str(type_str)
-    M.values[type_str] = vim.fn.input(M.prompts[type_str], M.values[type_str], M.completions[type_str])
+    M.values[type_str] = vim.fn.input{prompt = M.prompts[type_str], default = M.values[type_str], completion = M.completions[type_str]}
 end
 
 return M

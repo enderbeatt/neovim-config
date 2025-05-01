@@ -45,5 +45,18 @@ return {
         dap.configurations.c = dap.configurations.cpp
         dap.configurations.rust = dap.configurations.cpp
 
+        vim.api.nvim_create_user_command("DebugUpdateValue", helper.update_str, {
+            nargs = 1,
+            complete = function (ArgLead, _, _)
+                local matches = {}
+                for key, _ in pairs(helper.values) do
+                    if vim.startswith(key, ArgLead) then
+                        table.insert(matches, key)
+                    end
+                end
+                return matches
+            end
+        })
+
     end
 }
