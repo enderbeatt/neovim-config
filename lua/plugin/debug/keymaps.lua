@@ -18,6 +18,7 @@ local function jump_to_element(element)
     vim.notify(("element '%s' not found"):format(element), vim.log.levels.WARN)
 end
 
+
 return {
     "nvimtools/hydra.nvim",
     dependencies = {
@@ -27,8 +28,9 @@ return {
         local hydra = require('hydra')
         local dap = require('dap')
         local dapui = require("dapui")
+        local util = require("dapui.util")
+        local native_mode = ""
 
-        require('nvim-dap-virtual-text').setup({})
         hydra({
             name = "DEBUG",
             mode = "n",
@@ -37,6 +39,7 @@ return {
                 color = 'pink',
             },
             heads = {
+                { "f", nil }, -- just to easily return in debug mode if i fell out of it
                 { "I", function ()
                     dap.continue()
                     vim.cmd([[:DapVirtualTextEnable]])
@@ -49,7 +52,12 @@ return {
                 { "<C-j>", function () dap.down() end },
                 { "<C-k>", function () dap.up() end },
                 { "G", function () dap.run_to_cursor() end },
-                { "K", function () require('dapui').eval() end, { mode = { 'n', 'v' } } },
+                { "K", function ()
+                    require('dapui').eval(native_mode .. util.get_current_expr())
+                    if vim.fn.mode() == 'v' then
+                        vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Esc>', false, true, true), 'nx', false)
+                    end
+                end, { mode = { 'n', 'v' } } },
 
                 { "S", function () jump_to_element('code_win') end }, -- source code
                 { "W", function () jump_to_element('dapui_watches') end }, -- watches
@@ -58,41 +66,26 @@ return {
                 { "B", function () jump_to_element('dapui_breakpoints') end }, -- breakpoints
                 { "T", function () jump_to_element('dapui_stacks') end }, -- traces
 
-                { "w", function () dapui.elements.watches.add() end, { mode = { 'n', 'v' } } }, -- watch add
-
+                { "w", function ()
+                    dapui.elements.watches.add(native_mode .. util.get_current_expr())
+                    if vim.fn.mode() == 'v' then
+                        vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Esc>', false, true, true), 'nx', false)
+                    end
+                end, { mode = { 'n', 'v' } } }, -- watch add
+                { "n", function ()
+                    if native_mode == "" then
+                        native_mode = "/nat "
+                    else
+                        native_mode = ""
+                    end
+                end, { mode = { 'n', 'v' } } }, -- toggle native mod
 
                 { "ZZ", function ()
                     dap.terminate()
                     dapui.close()
                     vim.cmd([[:DapVirtualTextDisable]])
-                end },
-
-                { "ZR", function () dap.restart() end },
+                end, { exit = true } },
             }
-        })
-
-        hydra({
-            name = "WINDOW",
-            mode = "n",
-            body = "<C-W>",
-            heads = {
-                { 'h', '<C-w>h' },
-                { 'j', '<C-w>j' },
-                { 'k', '<C-w>k' },
-                { 'l', '<C-w>l' },
-                { 's', '<C-w>s' },
-                { 'v', '<C-w>v' },
-                { '+', '<C-w>+' },
-                { '-', '<C-w>-' },
-                { '>', '<C-w>>' },
-                { '<', '<C-w><' },
-                { '=', '<C-w>=' },
-                { 'q', '<cmd>close<CR>' },
-                { 'o', '<cmd>only<CR>' },
-                { '_', '<C-w>_' },
-                { '|', '<C-w>|' },
-                { '<Esc>', nil,  { exit = true, desc = false } },
-            },
         })
     end
 }
