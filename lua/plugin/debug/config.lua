@@ -1,10 +1,4 @@
-local function get_executable_path(path)
-    if vim.fn.has("win32") ~= 0 then
-        return vim.fn.expand("~") .. "/AppData/Local/nvim-data/" .. path .. ".exe"
-    else
-        return vim.fn.expand("~") .. "/.local/share/nvim/" .. path
-    end
-end
+local helper = require('handmade.debug_helpers')
 
 return {
     'mfussenegger/nvim-dap',
@@ -14,27 +8,39 @@ return {
         dap.adapters.cppdbg = {
             id = 'cppdbg',
             type = 'executable',
-            command = get_executable_path('mason/bin/OpenDebugAD7')
+            command = helper.get_executable_path('mason/bin/OpenDebugAD7')
+        }
+        dap.adapters.codelldb = {
+            id = 'codelldb',
+            type = 'executable',
+            command = helper.get_executable_path('mason/bin/codelldb')
         }
         dap.configurations.cpp = {
             {
-                name = "Launch",
-                type = "cppdbg",
+                name = "Launch without arguments",
+                type = "codelldb",
                 request = "launch",
                 program = function()
-                    return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+                    return helper.get_or_input('launch-program', 'Path to executable: ', vim.fn.getcwd() .. '/', 'file')
                 end,
-                runInTerminal = true,
-                cwd = "${workspaceFolder}",
-                stopAtEntry = true,
-                setupCommands = {
-                    {
-                        text = '-enable-pretty-printing',
-                        description =  'enable pretty printing',
-                        ignoreFailures = false
-                    },
-                },
-            }
+                stopOnEntry = false,
+                sourceLanguages = {"c", "cpp"},
+            },
+            {
+                name = "Launch without arguments (stdio redirect)",
+                type = "codelldb",
+                request = "launch",
+                program = function()
+                    return helper.get_or_input('launch-program', 'Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+                end,
+                stopOnEntry = false,
+                sourceLanguages = {"c", "cpp"},
+                stdio = function() return {
+                    helper.get_or_input_nil("stdin", "stdin: "),
+                    helper.get_or_input_nil("stdout", "stdout: "),
+                    helper.get_or_input_nil("stderr", "stderr: "),
+                } end,
+            },
         }
         dap.configurations.c = dap.configurations.cpp
         dap.configurations.rust = dap.configurations.cpp

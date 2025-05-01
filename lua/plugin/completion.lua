@@ -34,6 +34,11 @@ return {
         -- elsewhere in your config, without redefining it, due to `opts_extend`
         sources = {
             default = { 'lsp', 'path', 'snippets', 'buffer' },
+            -- per_filetype = {
+            --     ["dap-repl"] = { "dap", score_offset = 200 },
+            --     ["dapui_watches"] = { "dap", score_offset = 200 },
+            --     ["dapui_hover"] = { "dap", score_offset = 200 },
+            -- },
         },
 
         fuzzy = { implementation = "prefer_rust_with_warning" }
