@@ -13,7 +13,6 @@ function M.is_dap_window(ft)
         ["dapui_console"] = 1,
         ["dap-repl"] = 1,
     }
-    print(ft)
     return dap_windows[ft] ~= nil
 end
 
@@ -36,7 +35,6 @@ end
 function M.get_or_input(type_str, prompt, default, completion)
     prompt = prompt or ""
     local val = M.values[type_str]
-    vim.print(val)
     if val == nil then
         val = vim.fn.input{prompt = prompt, default = default, completion = completion}
         M.values[type_str] = val
