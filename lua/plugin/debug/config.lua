@@ -2,9 +2,26 @@ local helper = require('handmade.debug_helpers')
 
 return {
     'mfussenegger/nvim-dap',
+    dependencies = {
+        "enderbeatt/nvim-dap-view",
+    },
     version = '*',
     config = function ()
         local dap = require("dap")
+        local dv = require("dap-view")
+        dap.listeners.before.attach["dap-view-config"] = function()
+            dv.open()
+        end
+        dap.listeners.before.launch["dap-view-config"] = function()
+            dv.open()
+        end
+        dap.listeners.before.event_terminated["dap-view-config"] = function()
+            dv.close(true)
+        end
+        dap.listeners.before.event_exited["dap-view-config"] = function()
+            dv.close(true)
+        end
+
         dap.adapters.cppdbg = {
             id = 'cppdbg',
             type = 'executable',
