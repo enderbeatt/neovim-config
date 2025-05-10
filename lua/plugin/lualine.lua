@@ -5,8 +5,14 @@ return {
         require('lualine').setup {
             sections = {
                 lualine_x = { { require('handmade.timer').update_timer }, 'encoding', 'fileformat', 'filetype' }
-
-            }
+            },
+            disabled_filetypes = {
+                winbar = {
+                    "dap-view",
+                    "dap-repl",
+                    "dap-view-term",
+                },
+            },
         }
     end
 }

@@ -10,7 +10,7 @@ function M.is_dap_window(ft)
         ["dapui_scopes"] = 1,
         ["dapui_breakpoints"] = 1,
         ["dapui_stacks"] = 1,
-        ["dapui_console"] = 1,
+        ["dap-terminal"] = 1,
         ["dap-repl"] = 1,
     }
     return dap_windows[ft] ~= nil

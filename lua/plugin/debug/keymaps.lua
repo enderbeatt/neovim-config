@@ -5,6 +5,7 @@ local function jump_to_element(element)
     local dap_configurations = require('dap').configurations
     for _, win in ipairs(visible_wins) do
         local buf = vim.api.nvim_win_get_buf(win)
+        print(vim.bo[buf].filetype)
         if vim.bo[buf].filetype == element
             -- As we do not know the filetype of the code window, we have to check if
             -- we can find a window with a file type that is also in the dap.configurations
@@ -18,17 +19,41 @@ local function jump_to_element(element)
     vim.notify(("element '%s' not found"):format(element), vim.log.levels.WARN)
 end
 
+---@param start integer[]
+---@param finish integer[]
+local function get_selection(start, finish)
+    local start_line, start_col = start[2], start[3]
+    local finish_line, finish_col = finish[2], finish[3]
+
+    if start_line > finish_line or (start_line == finish_line and start_col > finish_col) then
+        start_line, start_col, finish_line, finish_col = finish_line, finish_col, start_line, start_col
+    end
+
+    local lines = vim.fn.getline(start_line, finish_line)
+    if #lines == 0 then
+        return
+    end
+    lines[#lines] = string.sub(lines[#lines], 1, finish_col)
+    lines[1] = string.sub(lines[1], start_col)
+    return lines
+end
+
+local function get_current_expr()
+    if vim.fn.mode() == "v" then
+        local start = vim.fn.getpos("v")
+        local finish = vim.fn.getpos(".")
+        local lines = get_selection(start, finish)
+        return table.concat(lines, "\n")
+    end
+    return vim.fn.expand("<cexpr>")
+end
 
 return {
     "nvimtools/hydra.nvim",
-    dependencies = {
-        "rcarriga/nvim-dap-ui",
-    },
-    config = function ()
+    config = function()
         local hydra = require('hydra')
         local dap = require('dap')
-        local dapui = require("dapui")
-        local util = require("dapui.util")
+        local dv = require("dap-view")
         local native_mode = ""
 
         hydra({
@@ -39,40 +64,41 @@ return {
                 color = 'pink',
             },
             heads = {
-                { "f", nil }, -- just to easily return in debug mode if i fell out of it
-                { "I", function ()
+                { "f",     nil }, -- just to easily return in debug mode if i fell out of it
+                { "I", function()
                     dap.continue()
                     vim.cmd([[:DapVirtualTextEnable]])
                 end },
-                { "J", function () dap.step_over() end },
-                { "H", function () dap.step_out() end },
-                { "L", function () dap.step_into() end },
-                { "b", function () dap.toggle_breakpoint() end },
-                { "c", function () dap.toggle_breakpoint(vim.fn.input("Enter Breakpoint Condition: ")) end },
-                { "<C-j>", function () dap.down() end },
-                { "<C-k>", function () dap.up() end },
-                { "G", function () dap.run_to_cursor() end },
-                { "K", function ()
-                    require('dapui').eval(native_mode .. util.get_current_expr())
+                { "J",     function() dap.step_over() end },
+                { "H",     function() dap.step_out() end },
+                { "L",     function() dap.step_into() end },
+                { "b",     function() dap.toggle_breakpoint() end },
+                { "c",     function() dap.toggle_breakpoint(vim.fn.input("Enter Breakpoint Condition: ")) end },
+                { "<C-j>", function() dap.down() end },
+                { "<C-k>", function() dap.up() end },
+                { "G",     function() dap.run_to_cursor() end },
+                { "K", function()
+                    -- require('dapui').eval(native_mode .. util.get_current_expr())
+                    require('dap.ui.widgets').hover(native_mode .. get_current_expr())
                     if vim.fn.mode() == 'v' then
                         vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Esc>', false, true, true), 'nx', false)
                     end
                 end, { mode = { 'n', 'v' } } },
 
-                { "S", function () jump_to_element('code_win') end }, -- source code
-                { "W", function () jump_to_element('dapui_watches') end }, -- watches
-                { "C", function () jump_to_element('dapui_console') end }, -- console
-                { "R", function () jump_to_element('dap-repl') end }, -- repl
-                { "B", function () jump_to_element('dapui_breakpoints') end }, -- breakpoints
-                { "T", function () jump_to_element('dapui_stacks') end }, -- traces
+                { "S", function() jump_to_element('code_win') end },           -- source code
+                { "C", function() jump_to_element('dap-view-term') end },      -- console
+                { "W", function() dv.show_view('watches') end },               -- watches
+                { "R", function() dv.show_view('repl') end },                  -- repl
+                { "B", function() dv.show_view('breakpoints') end },           -- breakpoints
+                { "T", function() dv.show_view('threads') end },               -- traces
 
-                { "w", function ()
-                    dapui.elements.watches.add(native_mode .. util.get_current_expr())
+                { "w", function()
+                    dv.add_expr(native_mode .. get_current_expr())
                     if vim.fn.mode() == 'v' then
                         vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Esc>', false, true, true), 'nx', false)
                     end
                 end, { mode = { 'n', 'v' } } }, -- watch add
-                { "n", function ()
+                { "n", function()
                     if native_mode == "" then
                         native_mode = "/nat "
                     else
@@ -80,9 +106,9 @@ return {
                     end
                 end, { mode = { 'n', 'v' } } }, -- toggle native mod
 
-                { "ZZ", function ()
+                { "ZZ", function()
                     dap.terminate()
-                    dapui.close()
+                    dv.close(true)
                     vim.cmd([[:DapVirtualTextDisable]])
                 end, { exit = true } },
             }
