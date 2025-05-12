@@ -1,5 +1,5 @@
 return {
-    "enderbeatt/nvim-dap-view",
+    "igorlfs/nvim-dap-view",
     -- dir = "~/projects/pet/nvim-dap-view/",
     dependencies = {
         'mfussenegger/nvim-dap',
@@ -14,7 +14,7 @@ return {
             winbar = {
                 show = true,
                 -- You can add a "console" section to merge the terminal with the other views
-                sections = { "watches", "scopes", "exceptions", "breakpoints", "threads", "repl" },
+                sections = { "watches", "scopes", "breakpoints", "threads", "repl" },
                 -- Must be one of the sections declared above
                 default_section = "watches",
                 headers = {
@@ -70,7 +70,6 @@ return {
             switchbuf = "usetab,newtab",
         })
 
-        local dv = require("dap-view")
         dap.listeners.before.attach["dap-view-config"] = function()
             dv.open()
         end

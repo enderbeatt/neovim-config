@@ -47,6 +47,15 @@ local function get_current_expr()
     end
     return vim.fn.expand("<cexpr>")
 end
+---
+---@param expr? string
+local function add_expr(expr)
+    if require("dap-view.watches.actions").add_watch_expr(expr or vim.fn.expand("<cexpr>")) then
+        require("dap-view.views").switch_to_view(require("dap-view.watches.view").show)
+    end
+end
+
+
 
 return {
     "nvimtools/hydra.nvim",
@@ -93,7 +102,7 @@ return {
                 { "T", function() dv.show_view('threads') end },               -- traces
 
                 { "w", function()
-                    dv.add_expr(native_mode .. get_current_expr())
+                    add_expr(native_mode .. get_current_expr())
                     if vim.fn.mode() == 'v' then
                         vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Esc>', false, true, true), 'nx', false)
                     end

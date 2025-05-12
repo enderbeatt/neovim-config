@@ -3,7 +3,7 @@ local helper = require('handmade.debug_helpers')
 return {
     'mfussenegger/nvim-dap',
     dependencies = {
-        "enderbeatt/nvim-dap-view",
+        "igorlfs/nvim-dap-view",
     },
     version = '*',
     config = function ()
