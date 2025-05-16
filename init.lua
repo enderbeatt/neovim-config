@@ -26,3 +26,5 @@ require("lazy").setup({
 
 require("handmade.terminal")
 require("handmade.run_shell")
+
+require("hydras")
