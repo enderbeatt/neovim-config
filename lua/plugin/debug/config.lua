@@ -62,7 +62,9 @@ return {
         dap.configurations.c = dap.configurations.cpp
         dap.configurations.rust = dap.configurations.cpp
 
-        vim.api.nvim_create_user_command("DebugUpdateValue", helper.update_str, {
+        vim.api.nvim_create_user_command("DebugUpdateValue", function (opts)
+            helper.update_str(opts.fargs[1])
+        end, {
             nargs = 1,
             complete = function (ArgLead, _, _)
                 local matches = {}
