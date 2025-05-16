@@ -10,6 +10,7 @@ return {
     config = function ()
         vim.keymap.set('n', '<leader>lg', require("neogit").open)
         require('gitsigns').setup{
+            signcolumn = false,
             on_attach = function(bufnr)
                 local gitsigns = require('gitsigns')
 
