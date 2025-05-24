@@ -22,6 +22,8 @@ return {
             -- See :h blink-cmp-config-keymap for defining your own keymap
             keymap = { preset = 'enter' },
 
+            signature = { enabled = true },
+
             enabled = function ()
                 if require('handmade.debug_helpers').is_dap_window(vim.bo.filetype) then
                     return false
