@@ -1,3 +1,23 @@
+-- local should_profile = os.getenv("NVIM_PROFILE")
+-- require("profile").instrument_autocmds()
+-- require("profile").start("*")
+--
+-- local function toggle_profile()
+--   local prof = require("profile")
+--   if prof.is_recording() then
+--     prof.stop()
+--     vim.ui.input({ prompt = "Save profile to:", completion = "file", default = "profile.json" }, function(filename)
+--       if filename then
+--         prof.export(filename)
+--         vim.notify(string.format("Wrote %s", filename))
+--       end
+--     end)
+--   else
+--     prof.start("*")
+--   end
+-- end
+-- vim.keymap.set("", "<f1>", toggle_profile)
+
 vim.g.mapleader = " "
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
