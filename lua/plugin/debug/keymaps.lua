@@ -19,44 +19,6 @@ local function jump_to_element(element)
     vim.notify(("element '%s' not found"):format(element), vim.log.levels.WARN)
 end
 
----@param start integer[]
----@param finish integer[]
-local function get_selection(start, finish)
-    local start_line, start_col = start[2], start[3]
-    local finish_line, finish_col = finish[2], finish[3]
-
-    if start_line > finish_line or (start_line == finish_line and start_col > finish_col) then
-        start_line, start_col, finish_line, finish_col = finish_line, finish_col, start_line, start_col
-    end
-
-    local lines = vim.fn.getline(start_line, finish_line)
-    if #lines == 0 then
-        return
-    end
-    lines[#lines] = string.sub(lines[#lines], 1, finish_col)
-    lines[1] = string.sub(lines[1], start_col)
-    return lines
-end
-
-local function get_current_expr()
-    if vim.fn.mode() == "v" then
-        local start = vim.fn.getpos("v")
-        local finish = vim.fn.getpos(".")
-        local lines = get_selection(start, finish)
-        return table.concat(lines, "\n")
-    end
-    return vim.fn.expand("<cexpr>")
-end
----
----@param expr? string
-local function add_expr(expr)
-    if require("dap-view.watches.actions").add_watch_expr(expr or vim.fn.expand("<cexpr>")) then
-        require("dap-view.views").switch_to_view(require("dap-view.watches.view").show)
-    end
-end
-
-
-
 return {
     "nvimtools/hydra.nvim",
     config = function()
@@ -87,8 +49,8 @@ return {
                 { "<C-k>", function() dap.up() end },
                 { "G",     function() dap.run_to_cursor() end },
                 { "K", function()
-                    -- require('dapui').eval(native_mode .. util.get_current_expr())
-                    require('dap.ui.widgets').hover(native_mode .. get_current_expr())
+                    local expr = native_mode .. require('dap-view.util.exprs').get_current_expr()
+                    require('dap.ui.widgets').hover(expr)
                     if vim.fn.mode() == 'v' then
                         vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Esc>', false, true, true), 'nx', false)
                     end
@@ -102,10 +64,8 @@ return {
                 { "T", function() dv.show_view('threads') end },               -- traces
 
                 { "w", function()
-                    add_expr(native_mode .. get_current_expr())
-                    if vim.fn.mode() == 'v' then
-                        vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Esc>', false, true, true), 'nx', false)
-                    end
+                    local expr = native_mode .. require('dap-view.util.exprs').get_current_expr()
+                    require('dap-view').add_expr(expr)
                 end, { mode = { 'n', 'v' } } }, -- watch add
                 { "n", function()
                     if native_mode == "" then

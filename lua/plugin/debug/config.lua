@@ -60,7 +60,33 @@ return {
             },
         }
         dap.configurations.c = dap.configurations.cpp
-        dap.configurations.rust = dap.configurations.cpp
+        dap.configurations.rust = {
+            {
+                name = "Launch without arguments",
+                type = "codelldb",
+                request = "launch",
+                program = function()
+                    return helper.get_or_input('launch-program', 'Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+                end,
+                stopOnEntry = false,
+                sourceLanguages = {"rust"},
+            },
+            {
+                name = "Launch without arguments (stdio redirect)",
+                type = "codelldb",
+                request = "launch",
+                program = function()
+                    return helper.get_or_input('launch-program', 'Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+                end,
+                stopOnEntry = false,
+                sourceLanguages = {"rust"},
+                stdio = function() return {
+                    helper.get_or_input_nil("stdin", "stdin: "),
+                    helper.get_or_input_nil("stdout", "stdout: "),
+                    helper.get_or_input_nil("stderr", "stderr: "),
+                } end,
+            },
+        }
 
         vim.api.nvim_create_user_command("DebugUpdateValue", function (opts)
             helper.update_str(opts.fargs[1])
