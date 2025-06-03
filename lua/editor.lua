@@ -42,3 +42,7 @@ vim.keymap.set({"n", "t"}, "<C-t>", function ()
     vim.cmd[[cclose]]
     require('handmade.terminal').toggle_terminal()
 end, {silent = true, desc = "Toggle Terminal"})
+
+vim.keymap.set("n", "<leader>ur", function ()
+    vim.cmd[[set rnu!]]
+end, {silent = true, desc = "Toggle Relative Mode"});
