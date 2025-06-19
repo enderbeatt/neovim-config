@@ -29,10 +29,7 @@ function M.toggle_terminal(idx, cmd, restart)
     if restart then
         M.quit_terminal(idx)
     end
-
-    local new_terminal = M.term_bufs[idx] == nil
-
-
+    local new_terminal = ~M.is_valid_terminal(idx)
     if new_terminal then
         M.prepare_terminal(idx)
     end
@@ -55,11 +52,15 @@ function M.go_to_terminal(idx)
     M.toggle_terminal(idx)
 end
 
+function M.is_valid_terminal(idx)
+    return M.term_bufs[idx] ~= nil and vim.api.nvim_buf_is_valid(M.term_bufs[idx])
+end
+
 function M.quit_terminal(idx)
     if M.term_win ~= nil and vim.api.nvim_win_is_valid(M.term_win) then
         vim.api.nvim_win_hide(M.term_win)
     end
-    if M.term_bufs[idx] ~= nil and vim.api.nvim_buf_is_valid(M.term_bufs[idx]) then
+    if M.is_valid_terminal(idx) then
         vim.api.nvim_buf_delete(M.term_bufs[idx], {})
     end
     M.term_bufs[idx] = nil
