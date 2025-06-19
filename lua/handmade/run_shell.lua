@@ -1,15 +1,20 @@
 local term = require('handmade.terminal')
 local unexpanded_cmd = nil
-
-local function task_run(opts)
-    unexpanded_cmd = table.concat(opts.fargs, ' ')
-    local cmd = vim.fn.expandcmd(unexpanded_cmd)
-    term.append_terminal(cmd)
-end
+local task_terminal = nil
 
 local function task_restart()
     local cmd = vim.fn.expandcmd(unexpanded_cmd)
-    term.toggle_terminal(nil, cmd, true)
+    term.toggle_terminal(task_terminal, cmd, true)
+end
+
+local function task_run(opts)
+    unexpanded_cmd = table.concat(opts.fargs, ' ')
+    if task_terminal then
+        task_restart()
+    else
+        term.insert_terminal(vim.fn.expandcmd(unexpanded_cmd))
+        task_terminal = term.last_term_idx
+    end
 end
 
 local function send_to_quickfix()

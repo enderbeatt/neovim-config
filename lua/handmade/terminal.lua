@@ -1,6 +1,7 @@
 local M = {
     term_bufs = {},
     term_win = nil,
+    last_term_idx = nil,
     terminal_config = {
         split = "below",
         win = 0,
@@ -13,23 +14,34 @@ function M.prepare_terminal(idx)
     M.term_bufs[idx] = new_buf
 end
 
-function M.append_terminal(cmd)
+function M.insert_terminal(cmd)
     M.hide_terminal()
-    M.toggle_terminal(#M.term_bufs + 1, cmd)
+    M.toggle_terminal(M.find_vacant_place(), cmd)
+    return M.last_term_idx
+end
+
+function M.find_vacant_place()
+    local idx = 1
+    while M.term_bufs[idx] do
+        idx = idx + 1
+    end
 end
 
 function M.toggle_terminal(idx, cmd, restart)
     if idx == nil then
-        idx = #M.term_bufs
-        if idx == 0 then
-            idx = 1
-        end
+        idx = M.last_term_idx
+    end
+
+    if idx == nil then
+        idx = M.find_vacant_place()
     end
 
     if restart then
         M.quit_terminal(idx)
     end
-    local new_terminal = ~M.is_valid_terminal(idx)
+
+    local new_terminal = not M.is_valid_terminal(idx)
+
     if new_terminal then
         M.prepare_terminal(idx)
     end
@@ -45,6 +57,8 @@ function M.toggle_terminal(idx, cmd, restart)
     if new_terminal then
         vim.cmd.terminal(cmd)
     end
+
+    M.last_term_idx = idx
 end
 
 function M.go_to_terminal(idx)
