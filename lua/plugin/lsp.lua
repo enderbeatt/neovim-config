@@ -37,16 +37,6 @@ return {
             local capabilities = require('blink.cmp').get_lsp_capabilities()
 
             require('mason').setup({})
-            require('mason-lspconfig').setup({
-                handlers = {
-                    function(server_name)
-                        require("lspconfig")[server_name].setup {
-                            capabilities = capabilities
-                        }
-                    end,
-                }
-            })
-
 
             vim.diagnostic.config({virtual_text = true})
 
