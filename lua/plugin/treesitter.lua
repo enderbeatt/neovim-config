@@ -25,15 +25,15 @@ return {
             indent = {
                 enable = true
             },
-            incremental_selection = {
-                enable = true,
-                keymaps = {
-                    init_selection = "<M-o>",
-                    scope_incremental = "<M-O>",
-                    node_incremental = "<M-o>",
-                    node_decremental = "<M-i>",
-                },
-            },
+            -- incremental_selection = {
+            --     enable = true,
+            --     keymaps = {
+            --         init_selection = "<M-o>",
+            --         scope_incremental = "<M-O>",
+            --         node_incremental = "<M-o>",
+            --         node_decremental = "<M-i>",
+            --     },
+            -- },
         }
 
         vim.treesitter.language.register('c', { 'vs', 'fs' })
