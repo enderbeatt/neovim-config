@@ -1,7 +1,7 @@
 return {
     {
         'saghen/blink.cmp',
-        dependencies = { 'L3MON4D3/LuaSnip' },
+        dependencies = { "L3MON4D3/LuaSnip", "nvim-orgmode/orgmode" },
 
         version = '1.1.1',
 
@@ -44,12 +44,20 @@ return {
             -- elsewhere in your config, without redefining it, due to `opts_extend`
             sources = {
                 default = { 'lazydev', 'lsp', 'path', 'buffer' },
+                per_filetype = {
+                    org = { 'orgmode' },
+                },
                 providers = {
                     lazydev = {
                         name = "LazyDev",
                         module = "lazydev.integrations.blink",
                         -- make lazydev completions top priority (see `:h blink.cmp`)
                         score_offset = 100,
+                    },
+                    orgmode = {
+                        name = 'Orgmode',
+                        module = 'orgmode.org.autocompletion.blink',
+                        fallbacks = { 'buffer' },
                     },
                 },
             },
