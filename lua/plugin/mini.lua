@@ -11,10 +11,10 @@ return {
         local gen_spec = require('mini.ai').gen_spec.treesitter
         require("mini.ai").setup({
             custom_textobjects = {
-                a = gen_spec({ a = '@parameter.outer', i = '@parameter.inner' }),
-                F = gen_spec({ a = '@function.outer', i = '@function.inner' }),
-            }
-
+                a = gen_spec({ a = '@parameter.outer', i = '@parameter.inner' }, { use_nvim_treesitter = true }),
+                F = gen_spec({ a = '@function.outer', i = '@function.inner' }, { use_nvim_treesitter = true }),
+            },
+            n_lines = 500,
         })
         require('mini.surround').setup({
             mappings = {
