@@ -32,7 +32,7 @@ local block_agenda = {
             type = "tags_todo",
             match = "-CANCELLED/!NEXT",
             org_agenda_overriding_header = "Projects Next Tasks",
-            org_agenda_sorting_strategy = { "todo-state-down", "effort-up", "category-keep" }
+            org_agenda_sorting_strategy = { "todo-state-down", "category-keep" }
         },
     }
 }
