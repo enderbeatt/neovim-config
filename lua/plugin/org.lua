@@ -18,9 +18,9 @@ local block_agenda = {
         },
         {
             type = "tags_todo",
-            match = "-CANCELLED/!",
-            org_agenda_overriding_header = "Stuck Projects",
-            org_agenda_sorting_strategy = { "category-keep" }
+            match = "-CANCELLED/!NEXT",
+            org_agenda_overriding_header = "Projects Next Tasks",
+            org_agenda_sorting_strategy = { "todo-state-down", "category-keep" }
         },
         {
             type = "tags_todo",
@@ -30,9 +30,9 @@ local block_agenda = {
         },
         {
             type = "tags_todo",
-            match = "-CANCELLED/!NEXT",
-            org_agenda_overriding_header = "Projects Next Tasks",
-            org_agenda_sorting_strategy = { "todo-state-down", "category-keep" }
+            match = "/WAITING|THINK",
+            org_agenda_overriding_header = "Stuck Projects",
+            org_agenda_sorting_strategy = { "category-keep" }
         },
     }
 }
