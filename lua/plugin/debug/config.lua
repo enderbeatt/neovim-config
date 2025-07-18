@@ -81,9 +81,9 @@ return {
                 stopOnEntry = false,
                 sourceLanguages = {"rust"},
                 stdio = function() return {
-                    helper.get_or_input_nil("stdin", "stdin: "),
-                    helper.get_or_input_nil("stdout", "stdout: "),
-                    helper.get_or_input_nil("stderr", "stderr: "),
+                    helper.get_or_nil("stdin", helper.input("stdin: ")),
+                    helper.get_or_nil("stdout", helper.input("stdout: ")),
+                    helper.get_or_nil("stderr", helper.input("stderr: ")),
                 } end,
             },
         }
