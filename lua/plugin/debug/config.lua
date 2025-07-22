@@ -38,7 +38,7 @@ return {
                 type = "codelldb",
                 request = "launch",
                 program = function()
-                    return helper.get_or_input('launch-program', 'Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+                    return helper.get_or('launch-program', helper.pick_executable())
                 end,
                 stopOnEntry = false,
                 sourceLanguages = {"c", "cpp"},
@@ -48,14 +48,14 @@ return {
                 type = "codelldb",
                 request = "launch",
                 program = function()
-                    return helper.get_or_input('launch-program', 'Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+                    return helper.get_or('launch-program', helper.pick_executable())
                 end,
                 stopOnEntry = false,
                 sourceLanguages = {"c", "cpp"},
                 stdio = function() return {
-                    helper.get_or_input_nil("stdin", "stdin: "),
-                    helper.get_or_input_nil("stdout", "stdout: "),
-                    helper.get_or_input_nil("stderr", "stderr: "),
+                    helper.get_or_nil("stdin", helper.input("stdin: ")),
+                    helper.get_or_nil("stdout", helper.input("stdout: ")),
+                    helper.get_or_nil("stderr", helper.input("stderr: ")),
                 } end,
             },
         }
@@ -66,7 +66,7 @@ return {
                 type = "codelldb",
                 request = "launch",
                 program = function()
-                    return helper.get_or_input('launch-program', 'Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+                    return helper.get_or('launch-program', helper.pick_executable())
                 end,
                 stopOnEntry = false,
                 sourceLanguages = {"rust"},
@@ -76,14 +76,14 @@ return {
                 type = "codelldb",
                 request = "launch",
                 program = function()
-                    return helper.get_or_input('launch-program', 'Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+                    return helper.get_or('launch-program', helper.pick_executable())
                 end,
                 stopOnEntry = false,
                 sourceLanguages = {"rust"},
                 stdio = function() return {
-                    helper.get_or_input_nil("stdin", "stdin: "),
-                    helper.get_or_input_nil("stdout", "stdout: "),
-                    helper.get_or_input_nil("stderr", "stderr: "),
+                    helper.get_or_nil("stdin", helper.input("stdin: ")),
+                    helper.get_or_nil("stdout", helper.input("stdout: ")),
+                    helper.get_or_nil("stderr", helper.input("stderr: ")),
                 } end,
             },
         }

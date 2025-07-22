@@ -1,7 +1,6 @@
 local M = {}
 M.values = {}
-M.prompts = {}
-M.completions = {}
+M.factories = {}
 
 --- @return boolean
 function M.is_dap_window(ft)
@@ -27,31 +26,63 @@ function M.get_executable_path(path)
     end
 end
 
---- @param type_str string
 --- @param prompt? string
 --- @param default? string
 --- @param completion? string
---- @return string
-function M.get_or_input(type_str, prompt, default, completion)
+--- @return function
+function M.input(prompt, default, completion)
     prompt = prompt or ""
+    return function ()
+        vim.fn.input{prompt = prompt, default = default, completion = completion}
+    end
+end
+
+--- @return function
+function M.pick_executable()
+    return function()
+        local co = coroutine.running()
+        require("snacks").picker.pick(nil, {
+            title = "Executables",
+            live = true,
+            layout = "select",
+            format = "text",
+            finder = function(config, ctx)
+                return require("snacks.picker.source.proc").proc({
+                    config,
+                    {
+                        cmd = "fdfind",
+                        args = { "-tx", "--color", "never" },
+                    }
+                }, ctx)
+            end,
+            confirm = function(picker, item)
+                picker:close()
+                coroutine.resume(co, item.text)
+            end
+        })
+        return coroutine.yield()
+    end
+end
+
+--- @param type_str string
+--- @param factory function
+--- @return string
+function M.get_or(type_str, factory)
     local val = M.values[type_str]
     if val == nil then
-        val = vim.fn.input{prompt = prompt, default = default, completion = completion}
+        val = factory()
         M.values[type_str] = val
-        M.prompts[type_str] = prompt
-        M.completions[type_str] = completion
+        M.factories[type_str] = factory
     end
     return val
 end
 
 
 --- @param type_str string
---- @param prompt? string
---- @param default? string
---- @param completion? string
+--- @param factory function
 --- @return string?
-function M.get_or_input_nil(type_str, prompt, default, completion)
-    local val = M.get_or_input(type_str, prompt, default, completion)
+function M.get_or_nil(type_str, factory)
+    local val = M.get_or(type_str, factory)
     if val == "" then
         return nil
     end
@@ -60,7 +91,7 @@ end
 
 --- @param type_str string
 function M.update_str(type_str)
-    M.values[type_str] = vim.fn.input{prompt = M.prompts[type_str], default = M.values[type_str], completion = M.completions[type_str]}
+    M.values[type_str] = M.factories[type_str]()
 end
 
 return M
