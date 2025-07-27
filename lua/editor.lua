@@ -40,3 +40,13 @@ vim.cmd([[autocmd BufEnter *.slint :setlocal filetype=slint]])
 vim.keymap.set("n", "<leader>ur", function ()
     vim.cmd[[set rnu!]]
 end, {silent = true, desc = "Toggle Relative Mode"});
+
+vim.keymap.set({ "n", "v" }, "<leader>ml", function ()
+    if vim.fn.mode() == "v" then
+        local keys = vim.api.nvim_replace_termcodes("<Esc>", true, true, true)
+        vim.api.nvim_feedkeys(keys, "x", false)
+        vim.cmd[['<'>lua]]
+    else
+        vim.cmd[[%lua]]
+    end
+end, {silent = true, desc = "Eval Lua Code"})
