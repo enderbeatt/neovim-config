@@ -41,9 +41,8 @@ end
 function M.pick_executable()
     return function()
         local co = coroutine.running()
-        require("snacks").picker.pick(nil, {
-            title = "Executables",
-            live = true,
+        require("snacks").picker.pick({
+            source = "executables",
             layout = "select",
             format = "text",
             finder = function(config, ctx)
@@ -51,7 +50,7 @@ function M.pick_executable()
                     config,
                     {
                         cmd = "fdfind",
-                        args = { "-tx", "--color", "never" },
+                        args = { "-tx", "-I", "--color", "never" },
                     }
                 }, ctx)
             end,
