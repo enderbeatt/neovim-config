@@ -88,14 +88,6 @@ return {
                 folder = "999-Meta/templates",
                 date_format = "%Y-%m-%d",
                 time_format = "%H:%M",
-                substitutions = {
-                    cursor = function (ctx)
-                        local loc = ctx.location
-                        vim.print(loc)
-                        vim.api.nvim_win_set_cursor(loc[2], {loc[3] + 1, loc[4]})
-                        return ""
-                    end
-                }
             },
         })
         vim.keymap.set("n", "<leader>oo", [[:Obsidian open<cr>]],              { desc = "Open Obsidian" })
