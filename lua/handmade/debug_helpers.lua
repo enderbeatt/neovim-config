@@ -50,7 +50,7 @@ function M.pick_executable()
                     config,
                     {
                         cmd = "fdfind",
-                        args = { "-tx", "-I", "--color", "never" },
+                        args = { "-L", "-tx", "--color", "never" },
                     }
                 }, ctx)
             end,

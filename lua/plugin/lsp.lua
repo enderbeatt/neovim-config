@@ -40,6 +40,20 @@ return {
 
             vim.diagnostic.config({virtual_text = true})
 
+            vim.api.nvim_create_autocmd("LspProgress", {
+                callback = function(ev)
+                    local spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
+                    Snacks.notifier(vim.lsp.status(), "info", {
+                        id = "lsp_progress",
+                        title = "LSP Progress",
+                        opts = function(notif)
+                            notif.icon = ev.data.params.value.kind == "end" and " "
+                            or spinner[math.floor(vim.uv.hrtime() / (1e6 * 80)) % #spinner + 1]
+                        end,
+                    })
+                end,
+            })
+
             require('lspconfig').clangd.setup({
                 capabilities = capabilities,
                 cmd = {
@@ -55,6 +69,7 @@ return {
                     "--experimental-modules-support",
                     "--header-insertion=never",
                 },
+                root_markers = { 'compile_commands.json' },
             })
             require('lspconfig').rust_analyzer.setup({
                 capabilities = capabilities,
