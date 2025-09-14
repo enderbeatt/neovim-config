@@ -81,6 +81,7 @@ return {
             })
             require('lspconfig').basedpyright.setup({
                 capabilities = capabilities,
+                filetypes = { "c", "cpp", "objc", "objcpp", "cuda" },
                 settings = {
                     basedpyright = {
                         analysis = {
