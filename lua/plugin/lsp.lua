@@ -56,6 +56,7 @@ return {
 
             require('lspconfig').clangd.setup({
                 capabilities = capabilities,
+                filetypes = { "c", "cpp", "objc", "objcpp", "cuda" },
                 cmd = {
                     "clangd",
                     "--background-index",
@@ -81,7 +82,6 @@ return {
             })
             require('lspconfig').basedpyright.setup({
                 capabilities = capabilities,
-                filetypes = { "c", "cpp", "objc", "objcpp", "cuda" },
                 settings = {
                     basedpyright = {
                         analysis = {
