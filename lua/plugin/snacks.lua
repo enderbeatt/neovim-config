@@ -35,7 +35,7 @@ return {
         { "<leader>sb", function() Snacks.picker.lines() end, desc = "Buffer Lines" },
         { "<leader>sB", function() Snacks.picker.grep_buffers() end, desc = "Grep Open Buffers" },
         { "<leader>sg", function() Snacks.picker.grep() end, desc = "Grep" },
-        { "<leader>sw", function() Snacks.picker.grep_word() end, desc = "Visual selection or word", mode = { "n", "x" } },
+        { "<leader>sv", function() Snacks.picker.grep_word() end, desc = "Visual selection or word", mode = { "n", "x" } },
         -- search
         { "<leader>s.", function() Snacks.picker.recent() end, desc = "Recent" },
         { '<leader>sf', function() Snacks.picker.files() end,  desc = '[S]earch [F]iles'  },
@@ -49,7 +49,8 @@ return {
         { "<leader>sD", function() Snacks.picker.diagnostics_buffer() end, desc = "Buffer Diagnostics" },
         { "<leader>sh", function() Snacks.picker.help() end, desc = "Help Pages" },
         { "<leader>sH", function() Snacks.picker.highlights() end, desc = "Highlights" },
-        { "<leader>si", function() Snacks.picker.icons() end, desc = "Icons" },
+        { "<leader>si", function() Snacks.picker.lsp_incoming_calls() end, desc = "Incoming call hierarchy" },
+        { "<leader>so", function() Snacks.picker.lsp_outgoing_calls() end, desc = "Outgouing call hierarchy" },
         { "<leader>sj", function() Snacks.picker.jumps() end, desc = "Jumps" },
         { "<leader>sk", function() Snacks.picker.keymaps() end, desc = "Keymaps" },
         { "<leader>sl", function() Snacks.picker.loclist() end, desc = "Location List" },
@@ -60,6 +61,7 @@ return {
         { "<leader>sr", function() Snacks.picker.resume() end, desc = "Resume" },
         { "<leader>su", function() Snacks.picker.undo() end, desc = "Undo History" },
         { "<leader>uC", function() Snacks.picker.colorschemes() end, desc = "Colorschemes" },
+        { "<leader>uI", function() Snacks.picker.icons() end, desc = "Icons" },
         -- LSP
         { "gD", function() Snacks.picker.lsp_declarations() end, desc = "Goto Declaration" },
         { "<leader>rr", function() Snacks.picker.lsp_references() end, nowait = true, desc = "References" },
