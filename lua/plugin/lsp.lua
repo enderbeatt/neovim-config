@@ -28,7 +28,6 @@ return {
                     vim.keymap.set("n", "K", function() vim.lsp.buf.hover() end, opts)
                     vim.keymap.set("n", "<leader>e", function() vim.diagnostic.open_float() end, opts)
                     vim.keymap.set({ "n", "x" }, "<leader>ca", function() vim.lsp.buf.code_action() end, opts)
-                    vim.keymap.set("n", "<leader>rr", function() vim.lsp.buf.references() end, opts)
                     vim.keymap.set("n", "<leader>rn", function() vim.lsp.buf.rename() end, opts)
                     vim.keymap.set({ "n", "v" }, "<leader>rf", function() vim.lsp.buf.format() end, opts)
                 end
@@ -67,7 +66,7 @@ return {
                     "--clang-tidy",
                     "--completion-style=bundled",
                     "--cross-file-rename",
-                    "--experimental-modules-support",
+                    -- "--experimental-modules-support",
                     "--header-insertion=never",
                 },
                 root_markers = { 'compile_commands.json' },
@@ -105,6 +104,10 @@ return {
                 capabilities = capabilities,
                 cmd = { "zls" },
                 filetypes = { "zig", "zir" },
+                settings = {
+                    enable_build_on_save = true,
+                    build_on_save_step = "check",
+                },
                 root_dir = require('lspconfig').util.root_pattern("zls.json", "build.zig", ".git"),
                 single_file_support = true,
             })
