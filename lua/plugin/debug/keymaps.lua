@@ -21,6 +21,7 @@ end
 
 return {
     "nvimtools/hydra.nvim",
+    enabled = false,
     config = function()
         local hydra = require('hydra')
         local dap = require('dap')

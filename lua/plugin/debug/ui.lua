@@ -5,6 +5,7 @@ return {
         'mfussenegger/nvim-dap',
         'theHamsta/nvim-dap-virtual-text',
     },
+    enabled = false,
     config = function()
         local dv = require("dap-view")
         local dap = require("dap")

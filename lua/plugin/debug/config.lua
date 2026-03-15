@@ -2,6 +2,7 @@ local helper = require('handmade.debug_helpers')
 
 return {
     'mfussenegger/nvim-dap',
+    enabled = false,
     dependencies = {
         "igorlfs/nvim-dap-view",
     },
