@@ -1,4 +1,4 @@
 return {
     "gpanders/nvim-parinfer",
-    ft = "clojure",
+    ft = { "clojure", "fennel" },
 }
