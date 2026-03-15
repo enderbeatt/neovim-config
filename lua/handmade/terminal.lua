@@ -5,6 +5,7 @@ local M = {
     terminal_config = {
         split = "below",
         win = 0,
+        width = 70,
         height = 20,
     }
 }
@@ -18,6 +19,12 @@ function M.insert_terminal(cmd)
     M.hide_terminal()
     M.toggle_terminal(M.find_vacant_place(), cmd)
     return M.last_term_idx
+end
+
+function M.change_terminal_split(split)
+    M.toggle_terminal()
+    M.terminal_config.split = split
+    M.toggle_terminal()
 end
 
 function M.find_vacant_place()

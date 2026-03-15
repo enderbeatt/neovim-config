@@ -64,16 +64,20 @@ vim.keymap.set('n', '<leader>tq', [[:SendToQuickfix<cr>]], { desc = '[T]ask [Q]u
 
 vim.keymap.set({ 'n', 't' }, '<C-t>', function()
     term.toggle_terminal()
-end, { desc = 'Go to recent terminal' });
+end, { desc = 'Go to recent terminal' })
 vim.keymap.set({ 'n', 't' }, '<M-1>', function()
     term.go_to_terminal(1)
-end, { desc = 'Go to terminal #1' });
+end, { desc = 'Go to terminal #1' })
 vim.keymap.set({ 'n', 't' }, '<M-2>', function()
     term.go_to_terminal(2)
-end, { desc = 'Go to terminal #2' });
+end, { desc = 'Go to terminal #2' })
 vim.keymap.set({ 'n', 't' }, '<M-3>', function()
     term.go_to_terminal(3)
-end, { desc = 'Go to terminal #3' });
+end, { desc = 'Go to terminal #3' })
 vim.keymap.set({ 'n', 't' }, '<M-4>', function()
     term.go_to_terminal(4)
-end, { desc = 'Go to terminal #4' });
+end, { desc = 'Go to terminal #4' })
+vim.keymap.set({ 'n' }, '<leader>ts', function()
+    term.change_terminal_split(term.terminal_config.split == 'below' and 'right' or 'below')
+end, { desc = 'Change split of terminal' })
+
