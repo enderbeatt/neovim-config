@@ -53,64 +53,73 @@ return {
                 end,
             })
 
-            require('lspconfig').clangd.setup({
-                capabilities = capabilities,
-                filetypes = { "c", "cpp", "objc", "objcpp", "cuda" },
-                cmd = {
-                    "clangd",
-                    "--background-index",
-                    "-j=8",
-                    -- by default, clang-tidy use -checks=clang-diagnostic-*,clang-analyzer-*
-                    -- to add more checks, create .clang-tidy file in the root directory
-                    -- and add Checks key, see https://clang.llvm.org/extra/clang-tidy/
-                    "--clang-tidy",
-                    "--completion-style=bundled",
-                    "--cross-file-rename",
-                    -- "--experimental-modules-support",
-                    "--header-insertion=never",
-                },
-                root_markers = { 'compile_commands.json' },
-            })
-            require('lspconfig').rust_analyzer.setup({
-                capabilities = capabilities,
-                settings = {
-                    ["rust-analyzer"] = {
-                        checkOnSave = true,
+            local lsp_configs = {
+                clangd = {
+                    capabilities = capabilities,
+                    filetypes = { "c", "cpp", "objc", "objcpp", "cuda" },
+                    cmd = {
+                        "clangd",
+                        "--background-index",
+                        "-j=8",
+                        -- by default, clang-tidy use -checks=clang-diagnostic-*,clang-analyzer-*
+                        -- to add more checks, create .clang-tidy file in the root directory
+                        -- and add Checks key, see https://clang.llvm.org/extra/clang-tidy/
+                        "--clang-tidy",
+                        "--completion-style=bundled",
+                        "--cross-file-rename",
+                        -- "--experimental-modules-support",
+                        "--header-insertion=never",
                     },
-                }
-            })
-            require('lspconfig').basedpyright.setup({
-                capabilities = capabilities,
-                settings = {
-                    basedpyright = {
-                        analysis = {
-                            typeCheckingMode = "basic",
-                        }
-                    }
-                }
-            })
-            require('lspconfig').lua_ls.setup({
-                capabilities = capabilities,
-                settings = {
-                    Lua = {
-                        runtime = { version = "Lua 5.1" },
-                        diagnostics = {
-                            globals = { "vim", "it", "describe", "before_each", "after_each" },
-                        }
-                    }
-                }
-            })
-            require('lspconfig').zls.setup({
-                capabilities = capabilities,
-                cmd = { "zls" },
-                filetypes = { "zig", "zir" },
-                settings = {
-                    enable_build_on_save = true,
-                    build_on_save_step = "check",
+                    root_markers = { 'compile_commands.json' },
                 },
-                root_dir = require('lspconfig').util.root_pattern("zls.json", "build.zig", ".git"),
-                single_file_support = true,
-            })
+                rust_analyzer = {
+                    capabilities = capabilities,
+                    settings = {
+                        ["rust-analyzer"] = {
+                            checkOnSave = true,
+                        },
+                    }
+                },
+                basedpyright = {
+                    capabilities = capabilities,
+                    settings = {
+                        basedpyright = {
+                            analysis = {
+                                typeCheckingMode = "basic",
+                            }
+                        }
+                    }
+                },
+                lua_ls = {
+                    capabilities = capabilities,
+                    settings = {
+                        Lua = {
+                            runtime = { version = "Lua 5.1" },
+                            diagnostics = {
+                                globals = { "vim", "it", "describe", "before_each", "after_each" },
+                            }
+                        }
+                    },
+                },
+                zls = {
+                    capabilities = capabilities,
+                    cmd = { "zls" },
+                    filetypes = { "zig", "zir" },
+                    settings = {
+                        enable_build_on_save = true,
+                        build_on_save_step = "check",
+                    },
+                    root_markers = { "zls.json", "build.zig", ".git" },
+                    single_file_support = true,
+                }
+            }
+            for lsp, config in pairs(lsp_configs) do
+                if not config.disabled then
+                    vim.lsp.config(lsp, config)
+                    vim.lsp.enable(lsp)
+                end
+            end
+
         end
     }
 }
