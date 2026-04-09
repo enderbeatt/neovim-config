@@ -25,12 +25,18 @@ return {
                 blink = true,
             },
             templates = {
-                folder = "999-Meta/templates",
+                folder = "templates",
                 date_format = "%Y-%m-%d",
                 time_format = "%H:%M",
             },
+            note_id_func = function(title)
+                local date = os.date("%Y-%m-%d %H:%M")
+                local filename = vim.trim(date .. " " .. (title or "")) .. ".md"
+                return filename
+            end
         })
         vim.keymap.set("n", "<leader>oo", [[:Obsidian open<cr>]],              { desc = "Open Obsidian" })
+        vim.keymap.set("n", "<leader>on", [[:Obsidian new_from_template<cr>]], { desc = "Create a note from template" })
         vim.keymap.set("n", "<leader>os", [[:Obsidian search<cr>]],            { desc = "Search In Obsidian Vault" })
         vim.keymap.set("n", "<leader>ob", [[:Obsidian backlinks<cr>]],         { desc = "Look at backlinks" })
         vim.keymap.set("n", "<leader>ot", [[:Obsidian tags<cr>]],              { desc = "Search through tags" })
