@@ -24,5 +24,7 @@ vim.api.nvim_create_autocmd({ 'FileType' }, {
 return {
     "nvim-treesitter/nvim-treesitter",
     lazy = false,
-    build = ":TSUpdate"
+    build = ":TSUpdate",
+    commit = "7caec274fd19c12b55902a5b795100d21531391f",
+    ensure_installed = { "lua" },
 }
