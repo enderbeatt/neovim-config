@@ -1,22 +1,22 @@
--- local should_profile = os.getenv("NVIM_PROFILE")
--- require("profile").instrument_autocmds()
+local should_profile = os.getenv("NVIM_PROFILE")
+require("profile").instrument_autocmds()
 -- require("profile").start("*")
---
--- local function toggle_profile()
---   local prof = require("profile")
---   if prof.is_recording() then
---     prof.stop()
---     vim.ui.input({ prompt = "Save profile to:", completion = "file", default = "profile.json" }, function(filename)
---       if filename then
---         prof.export(filename)
---         vim.notify(string.format("Wrote %s", filename))
---       end
---     end)
---   else
---     prof.start("*")
---   end
--- end
--- vim.keymap.set("", "<f1>", toggle_profile)
+
+local function toggle_profile()
+  local prof = require("profile")
+  if prof.is_recording() then
+    prof.stop()
+    vim.ui.input({ prompt = "Save profile to:", completion = "file", default = "profile.json" }, function(filename)
+      if filename then
+        prof.export(filename)
+        vim.notify(string.format("Wrote %s", filename))
+      end
+    end)
+  else
+    prof.start("*")
+  end
+end
+vim.keymap.set("", "<f1>", toggle_profile)
 
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
@@ -47,5 +47,6 @@ require("lazy").setup({
 
 require("handmade.terminal")
 require("handmade.run_shell")
+require("handmade.pi_nvim").setup()
 
 require("hydras")

@@ -77,3 +77,23 @@ vim.keymap.set({ "n", "x", "o" }, "<A-i>", function()
 		vim.lsp.buf.selection_range(-vim.v.count1)
 	end
 end, { desc = "Select child treesitter node or inner incremental lsp selections" })
+
+vim.keymap.set("n", "<leader>fnl", function()
+    local scratchfnl = vim.fn.getcwd() .. "/scratch.fnl"
+    local nfnl_config = vim.fn.getcwd() .. "/.nfnl.fnl"
+    if vim.fn.filereadable(scratchfnl) == 0 then
+        vim.notify("Generating scratch.fnl in cwd")
+        local f = io.open(scratchfnl, "w")
+        f:close()
+    end
+    vim.cmd(":e " .. scratchfnl)
+    if vim.fn.filereadable(nfnl_config) == 0 then
+        vim.notify("Generating .nfnl.fnl in cwd")
+        local f = io.open(nfnl_config, "w")
+        f:write([[
+{:fennel-macro-path                                           
+ "/home/enderbeat/.config/nvim/fnl/?.fnlm;/home/enderbeat/.config/nvim/fnl/?/init.fnlm;/home/enderbeat/.config/nvim/fnl/?.fnl;/home/enderbeat/.config/nvim/fnl/?/init-macros.fnl;/home/enderbeat/.config/nvim/fnl/?/init.fnl"}             
+        ]])
+        f:close()
+    end
+end, { desc = "Open or setup fennel scratch file with .nfnl.fnl" })

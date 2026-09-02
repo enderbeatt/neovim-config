@@ -32,6 +32,7 @@ function M.find_vacant_place()
     while M.term_bufs[idx] do
         idx = idx + 1
     end
+    return idx
 end
 
 function M.toggle_terminal(idx, cmd, restart)

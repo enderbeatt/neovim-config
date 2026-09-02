@@ -7,8 +7,10 @@ return {
     opts = {
         bigfile = { enabled = true },
         picker = { enabled = true },
-        quickfile = { enabled = true }, statuscolumn = { enabled = true },
+        quickfile = { enabled = true },
+        statuscolumn = { enabled = true },
         notifier = { enabled = true },
+        image = { enabled = true },
     },
     keys = {
         -- Top Pickers & Explorer

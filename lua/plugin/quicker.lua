@@ -19,6 +19,6 @@ return {
                 },
             },
         })
-        vim.keymap.set("n", "<leader>qq", function() require("quicker").toggle() end, { desc = "Toggle quickfix" })
+        vim.keymap.set("n", "<leader>qq", function() require("handmade.quickfix").toggle() end, { desc = "Toggle quickfix" })
     end
 }

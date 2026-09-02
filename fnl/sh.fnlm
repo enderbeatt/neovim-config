@@ -1,0 +1,75 @@
+(fn get-spec [forms]
+  (fn append-spec [spec v]
+    (if spec.out
+        (do 
+          (assert (not spec.file) "An extra file has been noticed")
+          (set spec.file v))
+
+        spec.path
+        (table.insert spec.args v)
+
+        (do
+          (set spec.path v)
+          (set spec.args []))))
+  (local res [{}])
+  (var cur (. res (length res)))
+  (each [_ v (ipairs forms)]
+    (if (= v `|)
+        (do
+          (table.insert res {})
+          (set cur (. res (length res))))
+
+        (= v `>)
+        (do
+          (table.insert res {})
+          (set cur (. res (length res)))
+          (set cur.out :write))
+
+        (= v `>>)
+        (do
+          (set cur (. res (length res)))
+          (set cur.out :append))
+
+
+        (or (sym? v) 
+            (= (type v) :boolean) 
+            (= (type v) :number))
+        (append-spec cur (tostring v))
+
+        (= (type v) :string)
+        (append-spec cur v)
+
+        (list? v)
+        (append-spec cur v)
+
+        (assert-compile false (.. (tostring v) "didnt match any rule"))))
+  (set cur.last true)
+  res)
+
+(fn $$ [& args]
+  `(let [sh# (require :sh)] 
+     (: (sh#.run (get-spec ,args)) :wait)))
+
+(fn $< [& args]
+  (let [new-args args]
+    (table.insert new-args `|)
+    (table.insert new-args `#(fn [x#] x#))
+    `(let [sh# (require :sh)] 
+       (: (sh#.run (get-spec ,new-args)) :wait))))
+
+(fn $<_ [& args]
+  (let [new-args args]
+    (table.insert new-args `|)
+    (table.insert new-args `#(fn [x#] (vim.trim x#)))
+    `(let [sh# (require :sh)] 
+       (: (sh#.run (get-spec ,new-args)) :wait))))
+
+(fn $! [& args]
+  `(let [sh# (require :sh)] 
+     (sh#.run (get-spec ,args))))
+
+{: get-spec
+ : $$
+ : $<
+ : $<_
+ : $!}

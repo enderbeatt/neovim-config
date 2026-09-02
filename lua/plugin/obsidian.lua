@@ -30,7 +30,7 @@ return {
                 time_format = "%H:%M",
             },
             note_id_func = function(title)
-                local date = os.date("%Y-%m-%d %H:%M")
+                local date = os.date("%Y-%m-%d %H-%M")
                 local filename = vim.trim(date .. " " .. (title or "")) .. ".md"
                 return filename
             end

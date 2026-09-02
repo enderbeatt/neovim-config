@@ -101,6 +101,9 @@ return {
                         }
                     },
                 },
+                fennel_ls = {
+                    capabilities = capabilities,
+                },
                 zls = {
                     capabilities = capabilities,
                     cmd = { "zls" },
