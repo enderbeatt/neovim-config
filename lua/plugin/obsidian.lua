@@ -35,10 +35,10 @@ return {
                 return filename
             end
         })
-        vim.keymap.set("n", "<leader>oo", [[:Obsidian open<cr>]],              { desc = "Open Obsidian" })
-        vim.keymap.set("n", "<leader>on", [[:Obsidian new_from_template<cr>]], { desc = "Create a note from template" })
-        vim.keymap.set("n", "<leader>os", [[:Obsidian search<cr>]],            { desc = "Search In Obsidian Vault" })
-        vim.keymap.set("n", "<leader>ob", [[:Obsidian backlinks<cr>]],         { desc = "Look at backlinks" })
-        vim.keymap.set("n", "<leader>ot", [[:Obsidian tags<cr>]],              { desc = "Search through tags" })
+        vim.keymap.set("n", "<leader>no", [[:Obsidian open<cr>]],              { desc = "Open Obsidian" })
+        vim.keymap.set("n", "<leader>nn", [[:Obsidian new_from_template<cr>]], { desc = "Create a note from template" })
+        vim.keymap.set("n", "<leader>ns", [[:Obsidian search<cr>]],            { desc = "Search In Obsidian Vault" })
+        vim.keymap.set("n", "<leader>nb", [[:Obsidian backlinks<cr>]],         { desc = "Look at backlinks" })
+        vim.keymap.set("n", "<leader>nt", [[:Obsidian tags<cr>]],              { desc = "Search through tags" })
     end
 }
