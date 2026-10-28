@@ -36,6 +36,7 @@ vim.opt.rtp:prepend(lazypath)
 
 
 require("editor")
+require("handmade.recent_cwds").setup()
 
 require("lazy").setup({
     spec = {
