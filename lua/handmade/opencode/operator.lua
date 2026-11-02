@@ -5,7 +5,7 @@ local function add_lines(first_line, last_line)
     first_line, last_line = last_line, first_line
   end
 
-  require("opencode.api").add_visual_selection({ open_input = false }, {
+  require("opencode.api").add_visual_selection_inline(nil, {
     start = first_line,
     stop = last_line,
   })
@@ -34,13 +34,13 @@ function M.setup()
 
   vim.keymap.set("n", "go", function()
     return M.operator()
-  end, { desc = "Add range to Opencode", expr = true })
+  end, { desc = "Insert range inline into Opencode", expr = true })
 
   vim.keymap.set("n", "goo", function()
     return M.operator() .. "_"
-  end, { desc = "Add line to Opencode", expr = true })
+  end, { desc = "Insert line inline into Opencode", expr = true })
 
-  vim.keymap.set("x", "go", M.visual, { desc = "Add range to Opencode" })
+  vim.keymap.set("x", "go", M.visual, { desc = "Insert range inline into Opencode" })
 end
 
 return M
