@@ -38,11 +38,17 @@ vim.opt.rtp:prepend(lazypath)
 require("editor")
 require("handmade.recent_cwds").setup()
 
+local specs = {
+    { import = "plugin" },
+    { import = "plugin/debug" },
+}
+if vim.fn.isdirectory(vim.fn.stdpath("config") .. "/lua/arcadia") == 1 then
+    require("arcadia").setup()
+    specs[#specs + 1] = { import = "arcadia.plugins" }
+end
+
 require("lazy").setup({
-    spec = {
-        { import = "plugin" },
-        { import = "plugin/debug" },
-    },
+    spec = specs,
     change_detection = { notify = false }
 })
 

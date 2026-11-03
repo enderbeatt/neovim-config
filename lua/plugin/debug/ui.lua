@@ -15,7 +15,7 @@ return {
             winbar = {
                 show = true,
                 -- You can add a "console" section to merge the terminal with the other views
-                sections = { "watches", "scopes", "breakpoints", "threads", "repl" },
+                sections = { "watches", "scopes", "exceptions", "breakpoints", "threads", "repl" },
                 -- Must be one of the sections declared above
                 default_section = "watches",
                 headers = {
@@ -81,6 +81,9 @@ return {
             dv.close(true)
         end
         dap.listeners.before.event_exited["dap-view-config"] = function()
+            dv.close(true)
+        end
+        dap.listeners.before.disconnect["dap-view-config"] = function()
             dv.close(true)
         end
     end

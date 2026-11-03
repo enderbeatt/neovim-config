@@ -7,7 +7,85 @@ return {
         "igorlfs/nvim-dap-view",
     },
     version = '*',
-    config = function ()
+    opts = function()
+        local adapters = {}
+        adapters.cppdbg = {
+            id = 'cppdbg',
+            type = 'executable',
+            command = helper.get_executable_path('mason/bin/OpenDebugAD7')
+        }
+        adapters.codelldb = {
+            id = 'codelldb',
+            type = 'executable',
+            command = helper.get_executable_path('mason/bin/codelldb')
+        }
+        local configurations = {}
+        configurations.cpp = {
+            {
+                name = "Launch without arguments",
+                type = "codelldb",
+                request = "launch",
+                program = function()
+                    return helper.get_or('launch-program', helper.pick_executable())
+                end,
+                stopOnEntry = false,
+                sourceLanguages = {"c", "cpp"},
+            },
+            {
+                name = "Launch without arguments (stdio redirect)",
+                type = "codelldb",
+                request = "launch",
+                program = function()
+                    return helper.get_or('launch-program', helper.pick_executable())
+                end,
+                stopOnEntry = false,
+                sourceLanguages = {"c", "cpp"},
+                stdio = function() return {
+                    helper.get_or_nil("stdin", helper.input("stdin: ")),
+                    helper.get_or_nil("stdout", helper.input("stdout: ")),
+                    helper.get_or_nil("stderr", helper.input("stderr: ")),
+                } end,
+            },
+        }
+        configurations.cpp[#configurations.cpp + 1] = {
+            name = "Attach to running program (lldb)",
+            type = "codelldb",
+            request = "attach",
+            pid = require('dap.utils').pick_process,
+            stopOnEntry = false,
+            sourceLanguages = {"c", "cpp"},
+        }
+        configurations.rust = {
+            {
+                name = "Launch without arguments",
+                type = "codelldb",
+                request = "launch",
+                program = function()
+                    return helper.get_or('launch-program', helper.pick_executable())
+                end,
+                stopOnEntry = false,
+                sourceLanguages = {"rust"},
+            },
+            {
+                name = "Launch without arguments (stdio redirect)",
+                type = "codelldb",
+                request = "launch",
+                program = function()
+                    return helper.get_or('launch-program', helper.pick_executable())
+                end,
+                stopOnEntry = false,
+                sourceLanguages = {"rust"},
+                stdio = function() return {
+                    helper.get_or_nil("stdin", helper.input("stdin: ")),
+                    helper.get_or_nil("stdout", helper.input("stdout: ")),
+                    helper.get_or_nil("stderr", helper.input("stderr: ")),
+                } end,
+            },
+        }
+
+        return { adapters = adapters, configurations = configurations }
+    end,
+    config = function(_, opts)
         local dap = require("dap")
         local dv = require("dap-view")
         dap.listeners.before.attach["dap-view-config"] = function()
@@ -16,81 +94,24 @@ return {
         dap.listeners.before.launch["dap-view-config"] = function()
             dv.open()
         end
-        dap.listeners.before.event_terminated["dap-view-config"] = function()
-            dv.close(true)
-        end
-        dap.listeners.before.event_exited["dap-view-config"] = function()
-            dv.close(true)
+        for _, event in ipairs({ "disconnect", "event_terminated", "event_exited" }) do
+            dap.listeners.before[event]["dap-view-config"] = function()
+                dv.close(true)
+            end
         end
 
-        dap.adapters.cppdbg = {
-            id = 'cppdbg',
-            type = 'executable',
-            command = helper.get_executable_path('mason/bin/OpenDebugAD7')
-        }
-        dap.adapters.codelldb = {
-            id = 'codelldb',
-            type = 'executable',
-            command = helper.get_executable_path('mason/bin/codelldb')
-        }
-        dap.configurations.cpp = {
-            {
-                name = "Launch without arguments",
-                type = "codelldb",
-                request = "launch",
-                program = function()
-                    return helper.get_or('launch-program', helper.pick_executable())
-                end,
-                stopOnEntry = false,
-                sourceLanguages = {"c", "cpp"},
-            },
-            {
-                name = "Launch without arguments (stdio redirect)",
-                type = "codelldb",
-                request = "launch",
-                program = function()
-                    return helper.get_or('launch-program', helper.pick_executable())
-                end,
-                stopOnEntry = false,
-                sourceLanguages = {"c", "cpp"},
-                stdio = function() return {
-                    helper.get_or_nil("stdin", helper.input("stdin: ")),
-                    helper.get_or_nil("stdout", helper.input("stdout: ")),
-                    helper.get_or_nil("stderr", helper.input("stderr: ")),
-                } end,
-            },
-        }
+        for name, adapter in pairs(opts.adapters) do
+            dap.adapters[name] = adapter
+        end
+        for filetype, configurations in pairs(opts.configurations) do
+            dap.configurations[filetype] = configurations
+        end
         dap.configurations.c = dap.configurations.cpp
-        dap.configurations.rust = {
-            {
-                name = "Launch without arguments",
-                type = "codelldb",
-                request = "launch",
-                program = function()
-                    return helper.get_or('launch-program', helper.pick_executable())
-                end,
-                stopOnEntry = false,
-                sourceLanguages = {"rust"},
-            },
-            {
-                name = "Launch without arguments (stdio redirect)",
-                type = "codelldb",
-                request = "launch",
-                program = function()
-                    return helper.get_or('launch-program', helper.pick_executable())
-                end,
-                stopOnEntry = false,
-                sourceLanguages = {"rust"},
-                stdio = function() return {
-                    helper.get_or_nil("stdin", helper.input("stdin: ")),
-                    helper.get_or_nil("stdout", helper.input("stdout: ")),
-                    helper.get_or_nil("stderr", helper.input("stderr: ")),
-                } end,
-            },
-        }
 
         vim.api.nvim_create_user_command("DebugUpdateValue", function (opts)
-            helper.update_str(opts.fargs[1])
+            vim.schedule(function()
+                helper.update_str(opts.fargs[1])
+            end)
         end, {
             nargs = 1,
             complete = function (ArgLead, _, _)

@@ -8,7 +8,7 @@ return {
         "folke/snacks.nvim",
     },
     config = function ()
-        vim.keymap.set('n', '<leader>lg', require("neogit").open)
+        vim.keymap.set('n', '<leader>lg', require("handmade.vcs").open, { desc = "Open repository UI" })
         require('gitsigns').setup{
             signcolumn = false,
             on_attach = function(bufnr)

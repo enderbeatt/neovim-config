@@ -55,6 +55,15 @@ vim.keymap.set({ "n", "v" }, "<leader>ml", function ()
     end
 end, {silent = true, desc = "Eval Lua Code"})
 
+vim.api.nvim_create_user_command("MessagesToFile", function(opts)
+    local path = opts.args ~= "" and opts.args or (vim.fn.getcwd() .. "/msg.log")
+    local output = vim.api.nvim_exec2("silent messages", { output = true }).output
+    vim.fn.writefile(vim.split(output, "\n", { plain = true }), path)
+    vim.notify("Wrote :messages to " .. path)
+end, { nargs = "?", complete = "file" })
+
+require("handmade.json_path_viewer")
+
 vim.keymap.set('n', '<leader>R', function()
   local session = vim.fn.stdpath('state') .. '/restart_session.vim'
   vim.cmd('mksession! ' .. vim.fn.fnameescape(session))
